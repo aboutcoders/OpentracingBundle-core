@@ -57,6 +57,8 @@ class FinishControllerSpanSubscriberTest extends TestCase
         $this->logger->error(Argument::any())->shouldNotBeCalled();
         $this->tracingId->getAsString()->shouldNotBeCalled();
         $this->tracing->setTagOfActiveSpan('http.status_code', 'not determined')->shouldBeCalledOnce();
+        # @see: FinishControllerSpanSubscriber::addTagsFromStatusCode
+        $this->tracing->setTagOfActiveSpan('error', true)->shouldBeCalledOnce();
         $this->tracing->finishActiveSpan()->shouldBeCalledOnce();
 
         $this->subject->onResponse(new EventWithNoResponse($request));
@@ -92,6 +94,8 @@ class FinishControllerSpanSubscriberTest extends TestCase
         $this->logger->error(Argument::any())->shouldBeCalled();
         $this->tracingId->getAsString()->shouldNotBeCalled();
         $this->tracing->setTagOfActiveSpan('http.status_code', 'not determined')->shouldBeCalledOnce();
+        # @see: FinishControllerSpanSubscriber::addTagsFromStatusCode
+        $this->tracing->setTagOfActiveSpan('error', true)->shouldBeCalledOnce();
         $this->tracing->finishActiveSpan()->shouldBeCalledOnce();
 
         $this->subject->onResponse(new EventWithResponseAndReflectionError($request));

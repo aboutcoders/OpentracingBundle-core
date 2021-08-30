@@ -39,7 +39,7 @@ final class RequestSpanOptionsFactory implements SpanOptionsFactory
                 'kernel.debug' => $this->kernelDebug ? 'true' : 'false',
                 'kernel.environment' => $this->kernelEnvironment,
                 'symfony.version' => Kernel::VERSION,
-                'opentracing.version' => Versions::getVersion('auxmoney/opentracing-bundle-core'),
+                'opentracing.version' => Versions::getVersion('abc/opentracing-bundle-core'),
                 'pod/host' => $this->hostName,
                 'php.version' => PHP_VERSION,
             ]

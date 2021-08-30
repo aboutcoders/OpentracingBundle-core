@@ -6,6 +6,9 @@ namespace Auxmoney\OpentracingBundle\Tests\Mock;
 
 use OpenTracing\Mock\MockSpan;
 use OpenTracing\Mock\MockTracer as OriginalMockTracer;
+use OpenTracing\NoopSpanContext;
+use OpenTracing\Scope;
+use OpenTracing\ScopeManager;
 use OpenTracing\Span;
 use OpenTracing\SpanContext;
 use OpenTracing\Tracer;
@@ -17,15 +20,17 @@ class MockTracer implements Tracer
 
     public function __construct()
     {
-        $this->mockTracer = new OriginalMockTracer(
-            [],
-            [
-                TEXT_MAP => 'OpenTracing\Mock\MockSpanContext::createAsRoot'
-            ]
-        );
+        $actualSpanContext = null;
+
+        $extractor = function ($carrier) use (&$actualCarrier) {
+            $actualCarrier = $carrier;
+            return new NoopSpanContext();
+        };
+
+        $this->mockTracer = new OriginalMockTracer([], [TEXT_MAP => $extractor]);
     }
 
-    public function getScopeManager()
+    public function getScopeManager(): ScopeManager
     {
         return $this->mockTracer->getScopeManager();
     }
@@ -35,12 +40,12 @@ class MockTracer implements Tracer
         return $this->mockTracer->getActiveSpan();
     }
 
-    public function startActiveSpan($operationName, $options = [])
+    public function startActiveSpan($operationName, $options = []): Scope
     {
         return $this->mockTracer->startActiveSpan($operationName, $options);
     }
 
-    public function startSpan($operationName, $options = [])
+    public function startSpan($operationName, $options = []): Span
     {
         return $this->mockTracer->startSpan($operationName, $options);
     }
@@ -53,8 +58,10 @@ class MockTracer implements Tracer
         $carrier['made_up_header'] = '1:2:3:4';
     }
 
-    public function extract($format, $carrier)
+    public function extract($format, $carrier): ?SpanContext
     {
+        $val = $this->mockTracer->extract($format, $carrier);
+
         return $this->mockTracer->extract($format, $carrier);
     }
 

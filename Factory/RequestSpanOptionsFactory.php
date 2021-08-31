@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Auxmoney\OpentracingBundle\Factory;
 
 use Auxmoney\OpentracingBundle\Internal\Utility;
-use PackageVersions\Versions;
+use Composer\InstalledVersions;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -39,7 +39,7 @@ final class RequestSpanOptionsFactory implements SpanOptionsFactory
                 'kernel.debug' => $this->kernelDebug ? 'true' : 'false',
                 'kernel.environment' => $this->kernelEnvironment,
                 'symfony.version' => Kernel::VERSION,
-                'opentracing.version' => Versions::getVersion('abc/opentracing-bundle-core'),
+                'opentracing.version' => InstalledVersions::getVersion('auxmoney/opentracing-bundle-core'),
                 'pod/host' => $this->hostName,
                 'php.version' => PHP_VERSION,
             ]

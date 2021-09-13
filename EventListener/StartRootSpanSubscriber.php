@@ -40,7 +40,7 @@ final class StartRootSpanSubscriber implements EventSubscriberInterface
 
     public function onRequest(KernelEvent $event): void
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 

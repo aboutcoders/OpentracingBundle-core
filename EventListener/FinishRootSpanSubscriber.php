@@ -32,7 +32,7 @@ final class FinishRootSpanSubscriber implements EventSubscriberInterface
 
     public function onFinishRequest(KernelEvent $event): void
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 
